@@ -1,0 +1,11 @@
+{
+  "id": "SpireOfInfinity",
+  "name": "SpireOfInfinity",
+  "author": "Dreamyloong",
+  "description": "Added characters from War of Infinity to Slay the Spire 2.",
+  "version": "0.0.1",
+  "has_pck": true,
+  "has_dll": true,
+  "dependencies": ["BaseLib"],
+  "affects_gameplay": true
+}
