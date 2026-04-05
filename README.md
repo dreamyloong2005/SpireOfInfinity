@@ -9,6 +9,7 @@
 ## 📖 简介 (About)
 
 **无尽尖塔 (Spire of Infinity)**
+
 在《杀戮尖塔2》（Slay The Spire 2）中游玩来自《无尽争霸》（War Of Infinity）的特色英雄，体验背景故事。
 
 ## ✨ 主要特性 (Features)
