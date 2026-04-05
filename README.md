@@ -29,7 +29,7 @@
 
 * **游戏版本**：需要public-beta版本。
 * **前置模组**：
-    BaseLib v0.2.6
+    BaseLib v0.2.6+
 * **已知冲突**：暂无
 
 ## 🌍 本地化 (Localization)
