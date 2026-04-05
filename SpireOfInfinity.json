@@ -3,7 +3,7 @@
   "name": "SpireOfInfinity",
   "author": "Dreamyloong",
   "description": "Added characters from War of Infinity to Slay the Spire 2.",
-  "version": "0.0.1",
+  "version": "0.0.1b",
   "has_pck": true,
   "has_dll": true,
   "dependencies": ["BaseLib"],
