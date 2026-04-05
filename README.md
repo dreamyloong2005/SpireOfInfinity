@@ -47,4 +47,5 @@
 ## 📜 鸣谢与开源协议 (Credits & License)
 
 感谢Reme大佬的模组教程！友情链接：https://glitchedreme.github.io/SlayTheSpire2ModdingTutorials/index.html
+
 本项目基于 [MIT License](LICENSE) 协议开源。
