@@ -1,1 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://bor2eoxeiodsl"]
 
+[ext_resource type="Texture2D" uid="uid://fjegq0b08jln" path="res://SpireOfInfinity/images/ui/char_select_watchman_of_darkness.png" id="1_hgup1"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -521.0
+offset_right = 1600.0
+offset_bottom = 679.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(1280, 600)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = -21.0
+offset_right = 2634.0
+offset_bottom = 1215.0
+texture = ExtResource("1_hgup1")
+expand_mode = 2
