@@ -1,0 +1,20 @@
+{
+    "SPIREOFINFINITY-INFINITE_DARKNESS_POWER.title": "无尽黑暗",
+    "SPIREOFINFINITY-INFINITE_DARKNESS_POWER.description":"突破[gold]黑暗能量[/gold]上限。",
+    "SPIREOFINFINITY-DARKNESS_AWAKEN_POWER.title":"黑暗觉醒",
+    "SPIREOFINFINITY-DARKNESS_AWAKEN_POWER.description":"在回合开始时，获得相当于你[gold]旧日之力[/gold]层数的力量和敏捷。\n你的卡牌自动强化且不再消耗[gold]黑暗能量[/gold]。",
+    "SPIREOFINFINITY-REVENGE_POWER.title":"复仇",
+    "SPIREOFINFINITY-REVENGE_POWER.description":"攻击该敌人会获得{energyPrefix:energyIcons(1)}。",
+    "SPIREOFINFINITY-GRIEVOUS_WOUNDS_POWER.title":"重伤",
+    "SPIREOFINFINITY-GRIEVOUS_WOUNDS_POWER.description":"减少生命回复量。",
+    "SPIREOFINFINITY-RUIN_POWER.title":"破灭",
+    "SPIREOFINFINITY-RUIN_POWER.description":"在下一回合恢复[gold]增益[/gold]效果。",
+    "SPIREOFINFINITY-PURGE_POWER.title":"净除",
+    "SPIREOFINFINITY-PURGE_POWER.description":"在下一回合恢复[gold]减益[/gold]效果。",
+    "SPIREOFINFINITY-DARK_RUIN_POWER.title":"黑暗破灭",
+    "SPIREOFINFINITY-DARK_RUIN_POWER.description":"这个单位无法获得[gold]增益[/gold]效果",
+    "SPIREOFINFINITY-DARK_PURGE_POWER.title":"黑暗净除",
+    "SPIREOFINFINITY-DARK_PURGE_POWER.description":"这个单位不会获得[gold]减益[/gold]效果。",
+    "SPIREOFINFINITY-POWER_FROM_THE_PAST_POWER.title":"旧日之力",
+    "SPIREOFINFINITY-POWER_FROM_THE_PAST_POWER.description":"来自过去的神力，集齐10层开启[gold]黑暗觉醒[/gold]。"
+}

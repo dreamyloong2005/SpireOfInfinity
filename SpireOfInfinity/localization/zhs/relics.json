@@ -1,0 +1,8 @@
+{
+    "SPIREOFINFINITY-DARK_HEART.title" : "黑暗之心",
+    "SPIREOFINFINITY-DARK_HEART.description" : "在每场战斗开始时，获得[blue]1[/blue]点[gold]黑暗能量[/gold]。",
+    "SPIREOFINFINITY-DARK_HEART.flavor": "[red]力量回来了......[/red]",
+    "SPIREOFINFINITY-DARKER_HEART.title" : "深暗之心",
+    "SPIREOFINFINITY-DARKER_HEART.description" : "在每场战斗开始时，获得[blue]3[/blue]点[gold]黑暗能量[/gold]。",
+    "SPIREOFINFINITY-DARKER_HEART.flavor": "[red]代价是失去更多情感......[/red]"
+}

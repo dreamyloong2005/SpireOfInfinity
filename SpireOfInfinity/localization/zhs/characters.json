@@ -1,0 +1,16 @@
+{
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.title" : "黑暗守望者",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.titleObject" : "黑暗守望者",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.description" : "来自异次元的力量收集者，寻找着世界的真相。",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.pronounObject" : "他",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.possessiveAdjective" : "他的",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.pronounPossessive" : "他的",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.pronounSubject" : "他",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.goldMonologue" : "[sine]身外之物罢了……[/sine]",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.eventDeathPrevention" : "有的人活着，但他已经死了。有的人死了，但他仍旧活着。",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.aromaPrinciple" : "[sine]置身黑暗之时，吾等成神之日。[/sine]",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.cardsModifierTitle" : "",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.cardsModifierDescription" : "",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.banter.alive.endTurnPing" : "",
+    "SPIREOFINFINITY-WATCHMAN_OF_DARKNESS.banter.dead.endTurnPing" : ""
+}
