@@ -15,7 +15,6 @@ using SpireOfInfinity.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Unlocks;
 using MegaCrit.Sts2.Core.Runs;
 using SpireOfInfinity.Core.Models.Cards;
@@ -25,6 +24,7 @@ using MegaCrit.Sts2.Core.Timeline;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using SpireOfInfinity.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace SpireOfInfinity;
 
@@ -110,7 +110,7 @@ public static class OnPlayWrapperPatch
         var player = __instance.Owner;
         if (player == null) return;
 
-        ExtraPlayerCombatDataLoader.Check(player.PlayerCombatState);
+        ExtraPlayerCombatDataLoader.CheckShoudInjectUi(player.PlayerCombatState);
         if (!ExtraPlayerCombatDataLoader.GetData(player.PlayerCombatState).shouldInjectUi) return;
 
         var sceneTree = Engine.GetMainLoop() as SceneTree;
@@ -181,7 +181,7 @@ public static class Patch_CombatManager_StartTurn
 		{
 			if (LocalContext.IsMe(player))
 			{
-				ExtraPlayerCombatDataLoader.Check(player.PlayerCombatState);
+				ExtraPlayerCombatDataLoader.CheckShoudInjectUi(player.PlayerCombatState);
 				if (!ExtraPlayerCombatDataLoader.GetData(player.PlayerCombatState).shouldInjectUi) return;
 
 				var sceneTree = Engine.GetMainLoop() as SceneTree;
@@ -208,11 +208,9 @@ public static class Patch_CombatManager_StartTurn
 }
 
 public static class DarkEnergyUnplayableReasons
-    {
-        public const UnplayableReason CurrentDarkEnergyCostTooHigh = (UnplayableReason)0x1000;
-        public const UnplayableReason MaxDarkEnergyCostTooHigh = (UnplayableReason)0x2000;
-        public const UnplayableReason PermanentMaxDarkEnergyCostTooHigh = (UnplayableReason)0x3000;
-    }
+{
+    public const UnplayableReason DarkEnergyCostTooHigh = (UnplayableReason)0x1000;
+}
 
 [HarmonyPatch(typeof(PlayerCombatState), nameof(PlayerCombatState.HasEnoughResourcesFor))]
 public static class PlayerCombatState_HasEnoughResourcesFor_Patch
@@ -226,27 +224,10 @@ public static class PlayerCombatState_HasEnoughResourcesFor_Patch
         if (playerCombatData == null)
             return;
 
-        // 1. 永久最大黑暗能量检查（实际可消耗上限为当前最大黑暗能量）
-        int permanentNeed = wodCard.PermanentMaxDarkEnergyCost.GetAmountToSpend();
-        if (permanentNeed > 0 && playerCombatData.MaxDarkEnergy < permanentNeed)
-        {
-            reason |= DarkEnergyUnplayableReasons.PermanentMaxDarkEnergyCostTooHigh;
-            if (__result) __result = false;
-        }
-
-        // 2. 最大黑暗能量检查
-        int maxNeed = wodCard.MaxDarkEnergyCost.GetAmountToSpend();
-        if (maxNeed > 0 && playerCombatData.MaxDarkEnergy < maxNeed)
-        {
-            reason |= DarkEnergyUnplayableReasons.MaxDarkEnergyCostTooHigh;
-            if (__result) __result = false;
-        }
-
-        // 3. 当前黑暗能量检查
         int currentNeed = wodCard.DarkEnergyCost.GetAmountToSpend();
-        if (currentNeed > 0 && playerCombatData.DarkEnergy < currentNeed && !wodCard.DynamicDarkEnergyCost)
+        if (currentNeed > 0 && playerCombatData.DarkEnergy < currentNeed && !wodCard.DynamicDarkEnergyCost && !card.Owner.Creature.HasPower<DarknessAwakenPower>())
         {
-            reason |= DarkEnergyUnplayableReasons.CurrentDarkEnergyCostTooHigh;
+            reason |= DarkEnergyUnplayableReasons.DarkEnergyCostTooHigh;
             if (__result) __result = false;
         }
     }
@@ -271,53 +252,13 @@ public static class CardModel_SpendResources_Patch
         var playerCombatData = playerCombatState.GetData();
         if (playerCombatData == null)
             return;
-
-        // ----- 1. 消耗永久最大黑暗能量（优先消耗临时超出部分）-----
-        int permanentCost = wodCard.PermanentMaxDarkEnergyCost.GetAmountToSpend();
-
-        // 如果是 X 费卡牌，记录实际消耗值（此时为需要消耗的总量，包含临时部分）
-        wodCard.PermanentMaxDarkEnergyCost.CapturedXValue = player.GetPlayerData()?.PermanentMaxDarkEnergy ?? 0;
-        player.LosePermanentMaxDarkEnergy(permanentCost);
-
-
-        // ----- 2. 消耗最大黑暗能量 -----
-        int maxCost = wodCard.MaxDarkEnergyCost.GetAmountToSpend();
-
-        wodCard.MaxDarkEnergyCost.CapturedXValue = playerCombatData.MaxDarkEnergy;
-        playerCombatState.GainMaxDarkEnergy(-maxCost);
-
-        // ----- 3. 消耗当前黑暗能量 -----
+            
         int currentCost = wodCard.DarkEnergyCost.GetAmountToSpend();
 
         wodCard.DarkEnergyCost.CapturedXValue = playerCombatData.DarkEnergy;
+
         playerCombatState.GainDarkEnergy(-currentCost);
     }
-}
-
-[HarmonyPatch(typeof(CardModel), "SelectionScreenPrompt", MethodType.Getter)]
-public static class CardModel_SelectionScreenPrompt_Patch
-{
-	public static bool Prefix(CardModel __instance, ref LocString __result)
-	{
-		// 检查当前卡牌 ID 是否需要重定向
-		if (__instance.Id.Entry == "SPIREOFINFINITY-REGRET_STRIKE" || __instance.Id.Entry == "SPIREOFINFINITY-MEMORIES")
-		{
-			// 构造目标卡牌的 LocString
-			LocString targetLoc = new("cards", "COSMIC_INDIFFERENCE.selectionScreenPrompt");
-
-			// 确保目标字符串存在
-			if (targetLoc.Exists())
-			{
-				// 将当前卡牌的动态变量添加到目标 LocString 中
-				__instance.DynamicVars.AddTo(targetLoc);
-				__result = targetLoc; // 设置返回值
-				return false; // 跳过原始 getter 的执行
-			}
-			// 如果目标不存在，继续执行原始 getter（可能会抛出异常或返回原字符串）
-		}
-		// 对于其他卡牌，继续执行原始 getter
-		return true;
-	}
 }
 
 [HarmonyPatch(typeof(ProgressSaveManager), "CheckFifteenElitesDefeatedEpoch")]
@@ -377,23 +318,57 @@ public static class EpochModel_Get_Patch
     }
 }
 
-[HarmonyPatch(typeof(Hook), nameof(Hook.ModifyHealAmount))]
+[HarmonyPatch(typeof(Creature), nameof(Creature.HealInternal))]
 public static class Hook_ModifyHealAmount_Patch
 {
-    public static bool Prefix(IRunState runState, CombatState? combatState, Creature creature, decimal amount, ref decimal __result)
+    public static void Prefix(Creature __instance, ref decimal amount)
     {
-        if(creature.HasPower<GrievousWoundsPower>())
+        var powerValue = __instance.GetPowerAmount<GrievousWoundsPower>();
+        
+        decimal power = Convert.ToDecimal(powerValue);
+        
+        if (power != 0)
         {
-            decimal num = amount;
-            foreach (AbstractModel item in runState.IterateHookListeners(combatState))
+            decimal reduction = amount * power / 100m;
+            amount -= reduction;
+            if (amount < 0) amount = 0;
+        }
+    }
+}
+
+[HarmonyPatch(typeof(CalculatedVar), nameof(CalculatedVar.WithMultiplier))]
+public static class CalculatedVar_WithMultiplier_Patch
+{
+    public static bool Prefix(CalculatedVar __instance, Func<CardModel, Creature?, decimal> multiplierCalc, ref CalculatedVar __result)
+    {
+        // 移除静态检查，允许任何委托（包括捕获实例的）
+        // 但仍需确保未重复设置
+        if (__instance.GetType().GetField("_multiplierCalc", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(__instance) != null)
+        {
+            throw new InvalidOperationException($"Tried to set extra multiplier calc on {__instance} twice!");
+        }
+
+        // 直接设置 _multiplierCalc 字段（可通过反射，或直接调用原始方法但跳过检查）
+        // 这里使用反射设置，避免调用原方法
+        var field = typeof(CalculatedVar).GetField("_multiplierCalc", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        field?.SetValue(__instance, multiplierCalc);
+
+        __result = __instance;
+        return false; // 跳过原始方法
+    }
+}
+
+[HarmonyPatch(typeof(Hook), nameof(Hook.AfterPowerAmountChanged))]
+public static class Hook_AfterPowerAmountChanged_Patch
+{
+    public static void Postfix(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    {
+        if(power.Id.Entry == "SPIREOFINFINITY-REVENGE_POWER" && amount > 0)
+        {
+            if(applier != null && applier.Player != null && applier.Player.PlayerCombatState != null)
             {
-                num = item.ModifyHealAmount(creature, num);
+                applier.Player.PlayerCombatState.GainGrudgeCount(Convert.ToInt32(amount));
             }
-            __result = creature.GetPowerAmount<GrievousWoundsPower>() <= 100 ? (100 - creature.GetPowerAmount<GrievousWoundsPower>()) * num / 100 : 0m;
-            return false;
-        }else
-        {
-            return true;
         }
     }
 }
