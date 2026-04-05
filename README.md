@@ -42,7 +42,7 @@
 
 如果你在游玩过程中遇到了 Bug，或者有很棒的建议，欢迎通过以下方式联系我：
 * 在 GitHub 提交 [Issue](https://github.com/dreamyloong2005/SpireOfInfinity/issues)。
-* 如果你想为这个模组贡献代码或翻译，非常欢迎提交 Pull Request！。
+* 如果你想为这个模组贡献代码或翻译，非常欢迎提交 Pull Request！
 
 ## 📜 鸣谢与开源协议 (Credits & License)
 
