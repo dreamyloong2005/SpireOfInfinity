@@ -4,7 +4,7 @@
 [![Release](https://img.shields.io/github/v/release/dreamyloong2005/SpireOfInfinity)](https://github.com/dreamyloong2005/SpireOfInfinity/releases)
 [![Issues](https://img.shields.io/github/issues/dreamyloong2005/SpireOfInfinity)](https://github.com/dreamyloong2005/SpireOfInfinity/issues)
 
-> *打破边界，向上攀登。为游戏带来全新挑战的扩展模组。*
+> *一道传送门悄然开启......*
 
 ## 📖 简介 (About)
 
