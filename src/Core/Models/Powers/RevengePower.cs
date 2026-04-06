@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using SpireOfInfinity.Core.Extensions;
-using SpireOfInfinity.Core.Models.Cards;
 using SpireOfInfinity.Core.Models.Characters;
 
 namespace SpireOfInfinity.Core.Models.Powers
@@ -15,7 +14,7 @@ namespace SpireOfInfinity.Core.Models.Powers
         public override PowerType Type => PowerType.Debuff;
         public override PowerStackType StackType => PowerStackType.Counter;
         public override bool AllowNegative => false;
-        public override async Task AfterDamageReceivedLate(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
+        public override async Task BeforeDamageReceived(PlayerChoiceContext choiceContext, Creature target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
         {
             if(target == Owner)
             {
@@ -25,7 +24,7 @@ namespace SpireOfInfinity.Core.Models.Powers
                     {
                         dealer.Player.PlayerCombatState.GainEnergy(1);
                         dealer.Player.PlayerCombatState.GainDarkEnergy(1);
-                        await PowerCmd.TickDownDuration(this);
+                        PowerCmd.TickDownDuration(this); // No need to use await since the animation should be played while the damage is being dealed
                     }
                 }
             }
